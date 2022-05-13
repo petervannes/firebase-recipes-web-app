@@ -17,15 +17,34 @@ function App() {
   const [recipesPerPage, setRecipesPerPage] = useState(3);
 
   const setCategoryFilterHandler = (category) => {
-    setCategoryFilter((oldState) => category);
+    startTransition(() => {
+      setCategoryFilter(category);
+    });
   };
 
+  const setOrderByHandler = (order) => {
+    startTransition(() => {
+      setOrderBy(order);
+    });
+  };
+
+  const setRecipesPerPageHandler = (recipes) => {
+    startTransition(() => {
+      setRecipesPerPage(recipes);
+    });
+  };
+
+  const setRecipesHandler = (recipes) => {
+    startTransition(() => {
+      setRecipes(recipes);
+    });
+  };
   useEffect(() => {
     setIsLoading(true);
 
     fetchRecipes()
       .then((fetchedRecipes) => {
-        setRecipes(fetchedRecipes);
+        setRecipesHandler(fetchedRecipes);
       })
       .catch((error) => {
         console.error(error.message);
@@ -111,8 +130,8 @@ function App() {
   function handleRecipesPerPageChange(event) {
     const recipesPerPage = event.target.value;
 
-    setRecipes([]);
-    setRecipesPerPage(recipesPerPage);
+    setRecipesHandler([]);
+    setRecipesPerPageHandler(recipesPerPage);
   }
 
   function handleLoadMoreRecipesClick() {
@@ -126,7 +145,7 @@ function App() {
     try {
       const fetchedRecipes = await fetchRecipes(cursorId);
 
-      setRecipes(fetchedRecipes);
+      setRecipesHandler(fetchedRecipes);
     } catch (error) {
       console.error(error.message);
       throw error;
@@ -260,7 +279,7 @@ function App() {
           <label className="input-label">
             <select
               value={orderBy}
-              onChange={(e) => setOrderBy(e.target.value)}
+              onChange={(e) => setOrderByHandler(e.target.value)}
               className="select"
             >
               <option value="publishDateDesc">
