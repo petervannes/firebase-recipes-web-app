@@ -1,7 +1,11 @@
 import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
-import "firebase/compat/firestore";
-import "firebase/compat/storage";
+// import "firebase/compat/auth";
+// import "firebase/compat/firestore";
+// import "firebase/compat/storage";
+
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -13,8 +17,18 @@ const config = {
   measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
-if (!firebase.app.length) {
-  firebase.initializeApp(config);
-}
+const firebaseApp = initializeApp(config);
+const auth = getAuth(firebaseApp);
+const firestore = getFirestore(firebaseApp);
 
-export default firebase;
+// if (!firebase.app.length) {
+//   console.log("Initializing app");
+//   firebase.initializeApp(config);
+// }
+
+const firebaseConfig = {
+  auth,
+  firestore,
+};
+
+export default firebaseConfig;
