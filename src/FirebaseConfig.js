@@ -21,7 +21,7 @@ const config = {
 const firebaseApp = initializeApp(config);
 const auth = getAuth(firebaseApp);
 const firestore = getFirestore(firebaseApp);
-const firestorage = getStorage(firebaseApp);
+const storage = getStorage(firebaseApp);
 
 // if (!firebase.app.length) {
 //   console.log("Initializing app");
@@ -31,7 +31,7 @@ const firestorage = getStorage(firebaseApp);
 const firebaseConfig = {
   auth,
   firestore,
-  firestorage,
+  storage,
 };
 
 export default firebaseConfig;

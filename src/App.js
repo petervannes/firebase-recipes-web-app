@@ -39,6 +39,12 @@ function App() {
       setRecipes(recipes);
     });
   };
+
+  const setCurrentRecipeHandler = (recipes) => {
+    startTransition(() => {
+      setCurrentRecipe(recipes);
+    });
+  };
   useEffect(() => {
     setIsLoading(true);
 
@@ -178,7 +184,7 @@ function App() {
       handleFetchRecipes();
 
       alert(`successfully updated a recipe with an ID = ${recipeId}`);
-      setCurrentRecipe(null);
+      setCurrentRecipeHandler(null);
     } catch (error) {
       alert(error.message);
       throw error;
@@ -196,7 +202,7 @@ function App() {
 
         handleFetchRecipes();
 
-        setCurrentRecipe(null);
+        setCurrentRecipeHandler(null);
 
         window.scrollTo(0, 0);
 
@@ -215,14 +221,14 @@ function App() {
 
     if (selectedRecipe) {
       startTransition(() => {
-        setCurrentRecipe(selectedRecipe);
+        setCurrentRecipeHandler(selectedRecipe);
         window.scrollTo(0, document.body.scrollHeight);
       });
     }
   }
 
   function handleEditRecipeCancel() {
-    setCurrentRecipe(null);
+    setCurrentRecipeHandler(null);
   }
 
   function lookupCategoryLabel(categoryKey) {

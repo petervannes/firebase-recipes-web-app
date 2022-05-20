@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, startTransition } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import FirebaseStorageService from "../FirebaseStorageService";
@@ -12,14 +12,26 @@ function ImageUploadPreview({
   const [uploadProgress, setUploadProgrses] = useState(-1);
   const [imageUrl, setImageUrl] = useState("");
 
+  const setImageUrlHandler = (image) => {
+    startTransition(() => {
+      setImageUrl(image);
+    });
+  };
+
+  const setUploadProgrsesHandler = (progress) => {
+    startTransition(() => {
+      setUploadProgrses(progress);
+    });
+  };
+
   const fileInputRef = useRef();
 
   useEffect(() => {
     if (existingImageUrl) {
-      setImageUrl(existingImageUrl);
+      setImageUrlHandler(existingImageUrl);
     } else {
-      setUploadProgrses(-1);
-      setImageUrl("");
+      setUploadProgrsesHandler(-1);
+      setImageUrlHandler("");
       fileInputRef.current.value = null;
     }
   }, [existingImageUrl]);
@@ -39,13 +51,13 @@ function ImageUploadPreview({
       const downloadUrl = await FirebaseStorageService.uploadFile(
         file,
         `${basePath}/${generatedFileId}`,
-        setUploadProgrses
+        setUploadProgrsesHandler
       );
 
-      setImageUrl(downloadUrl);
+      setImageUrlHandler(downloadUrl);
       handleUploadFinish(downloadUrl);
     } catch (error) {
-      setUploadProgrses(-1);
+      setUploadProgrsesHandler(-1);
       fileInputRef.current.value = null;
       alert(error.message);
       throw error;
@@ -53,11 +65,13 @@ function ImageUploadPreview({
   }
 
   function handleCancelImageClick() {
-    FirebaseStorageService.deleteFile(imageUrl);
-    fileInputRef.current.value = null;
-    setImageUrl("");
-    setUploadProgrses(-1);
-    handleUploadCancel();
+    startTransition(() => {
+      FirebaseStorageService.deleteFile(imageUrl);
+      fileInputRef.current.value = null;
+      setImageUrlHandler("");
+      setUploadProgrsesHandler(-1);
+      handleUploadCancel();
+    });
   }
 
   return (
