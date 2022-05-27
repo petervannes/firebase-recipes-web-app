@@ -2,9 +2,9 @@ import { startTransition, useEffect, useState } from "react";
 import FirebaseAuthService from "./FirebaseAuthService";
 import LoginForm from "./components/login-form";
 import AddEditRecipeForm from "./components/add-edit-recipe-form";
+import FirebaseFirestoreService from "./FirebaseFirestoreService";
 
 import "./App.css";
-import FirebaseFirestoreService from "./FirebaseFirestoreService";
 
 function App() {
   console.log("App rendered");
